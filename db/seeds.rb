@@ -31,3 +31,7 @@ responses = Response.create!([
   { question_id: questions[2].id, app_id: apps[1].id, body: "If they can do it" },
   { question_id: questions[3].id, app_id: apps[1].id, body: "Stuff" },
 ])
+
+admins = Admin.create([
+  { first_name: "Mike", last_name: "Boan", email: "mboan@appacademy.io", password: "starwars" }
+])
