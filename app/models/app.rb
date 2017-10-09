@@ -3,4 +3,5 @@ class App < ApplicationRecord
   validates :email, uniqueness: true
 
   has_many :responses
+  accepts_nested_attributes_for :responses
 end
