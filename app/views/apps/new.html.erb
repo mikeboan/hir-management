@@ -1,22 +1,19 @@
+<% errors = flash[:errors] %>
+
 <form action="<%= apps_url %>" method="POST">
   <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
 
-  <label for="first-name">First Name</label>
-  <input id="first-name" type="text" name="app[first_name]" value="<%= @app.first_name %>">
+  <% ["first_name", "last_name", "email"].each do |field_name| %>
+    <%= render "apps/input", field_name: field_name, field_value: @app[field_name], errors: errors %>
+  <% end %>
 
-  <label for="last-name">Last Name</label>
-  <input id="last-name" type="text" name="app[last_name]" value="<%= @app.last_name %>">
-
-  <label for="email">Email</label>
-  <input id="email" type="text" name="app[email]" value="<%= @app.email %>">
+  <% Question.all.each do |question| %>
+    <h3><%= question.body %></h3>
+    <input type="hidden" name="app[responses_attributes][][question_id]" value="<%= question.id %>">
+    <textarea name="app[responses_attributes][][body]"><%=
+      @app.responses.find_by(question_id: question.id)&.body
+    %></textarea>
+  <% end %>
 
   <input type="submit" value="Submit Application">
 </form>
-
-<% if flash[:errors] %>
-  <ul>
-    <% flash[:errors].each do |error| %>
-      <li><%= error %></li>
-    <% end %>
-  </ul>
-<% end %>

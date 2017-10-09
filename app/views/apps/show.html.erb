@@ -1,2 +1,9 @@
 <h1><%= @app.first_name %>  <%= @app.last_name %></h1>
 <h3><%= @app.email %></h3>
+
+<% Question.all.each do |question| %>
+  <h3><%= question.body %></h3>
+  <p name="app[responses_attributes][][body]"><%=
+    @app.responses.find_by(question_id: question.id)&.body
+  %></p>
+<% end %>

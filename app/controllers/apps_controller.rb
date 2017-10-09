@@ -7,11 +7,15 @@ class AppsController < ApplicationController
     @app = App.new(app_params)
 
     if @app.save
-      render :show
+      redirect_to app_url(@app)
     else
-      flash[:errors] = @app.errors.full_messages
+      flash[:errors] = @app.errors
       redirect_to apply_url
     end
+  end
+
+  def show
+    @app = App.find(params[:id])
   end
 
   private
@@ -23,7 +27,7 @@ class AppsController < ApplicationController
         :first_name,
         :last_name,
         :email,
-        response_attributes: [ :id, :question_id, :body ]
+        responses_attributes: [ :question_id, :body ]
       )
   end
 end
