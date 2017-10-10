@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171009161206) do
+ActiveRecord::Schema.define(version: 20171010155935) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -23,6 +23,8 @@ ActiveRecord::Schema.define(version: 20171009161206) do
     t.string "password_digest", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["email"], name: "index_admins_on_email", unique: true
+    t.index ["session_token"], name: "index_admins_on_session_token", unique: true
   end
 
   create_table "apps", force: :cascade do |t|
@@ -31,9 +33,21 @@ ActiveRecord::Schema.define(version: 20171009161206) do
     t.string "email", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["email"], name: "index_apps_on_email", unique: true
+  end
+
+  create_table "followups", force: :cascade do |t|
+    t.integer "interview_id", null: false
+    t.string "question"
+    t.index ["interview_id"], name: "index_followups_on_interview_id"
   end
 
   create_table "interviews", force: :cascade do |t|
+    t.integer "app_id", null: false
+    t.text "sanity_question"
+    t.text "job_search_question"
+    t.text "manager_notes"
+    t.text "interviewee_notes"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -50,6 +64,25 @@ ActiveRecord::Schema.define(version: 20171009161206) do
     t.text "body", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["app_id"], name: "index_responses_on_app_id"
+    t.index ["question_id"], name: "index_responses_on_question_id"
+  end
+
+  create_table "rubric_items", force: :cascade do |t|
+    t.integer "rubric_id", null: false
+    t.integer "type", null: false
+    t.integer "score", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["rubric_id"], name: "index_rubric_items_on_rubric_id"
+  end
+
+  create_table "rubrics", force: :cascade do |t|
+    t.integer "interview_id", null: false
+    t.integer "type"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["interview_id"], name: "index_rubrics_on_interview_id"
   end
 
 end
